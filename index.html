@@ -8,7 +8,7 @@
   <!-- A-Frame Core -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   
-  <!-- A-Frame Extras (Provides movement-controls and snap-turn components) -->
+  <!-- A-Frame Extras (Locomotion & Snap Turn) -->
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
   
   <!-- A-Frame Physics System -->
@@ -17,7 +17,7 @@
   <!-- Super-Hands Component -->
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-super-hands-component@master/dist/super-hands.min.js"></script>
   
-  <!-- A-Frame Physics Extras -->
+  <!-- A-Frame Physics Extras (Connects Super-Hands to Cannon.js Physics Bodies) -->
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-extras@master/dist/aframe-physics-extras.min.js"></script>
   
   <!-- Custom Event Listener component for UI / visual feedback -->
@@ -72,36 +72,38 @@
         </a-entity>
       </a-camera>
 
-      <!-- Left Hand VR Controller (Movement & Interaction) -->
+      <!-- Left Hand VR Controller -->
       <a-entity 
         id="leftHand"
         hand-controls="hand: left"
         rotation="-45 0 0"
+        static-body="shape: sphere; sphereRadius: 0.1"
+        physics-collider
         sphere-collider="objects: .grabbable; radius: 0.15"
         super-hands="
-          colliderEvent: raycaster-intersection;
-          colliderEventProperty: els;
-          colliderEndEvent: raycaster-intersection-cleared;
-          colliderEndEventProperty: clearedEls;">
+          colliderEvent: collisions;
+          colliderEventProperty: collisions;
+          colliderEndEvent: collisions;
+          colliderEndEventProperty: clearedEls;
+          grabStartButtons: triggerdown, gripdown;
+          grabEndButtons: triggerup, gripup;">
       </a-entity>
 
-      <!-- Right Hand VR Controller (Snap Turning 30° & Interaction) -->
+      <!-- Right Hand VR Controller -->
       <a-entity 
         id="rightHand"
         hand-controls="hand: right"
-        rotation="-45 0 0"
+        rotation="45 0 0"
+        static-body="shape: sphere; sphereRadius: 0.1"
+        physics-collider
         sphere-collider="objects: .grabbable; radius: 0.15"
         super-hands="
-          colliderEvent: raycaster-intersection;
-          colliderEventProperty: els;
-          colliderEndEvent: raycaster-intersection-cleared;
-          colliderEndEventProperty: clearedEls;"
-        magicleap-controls
-        daydream-controls
-        gearvr-controls
-        oculus-touch-controls
-        vive-controls
-        windows-motion-controls
+          colliderEvent: collisions;
+          colliderEventProperty: collisions;
+          colliderEndEvent: collisions;
+          colliderEndEventProperty: clearedEls;
+          grabStartButtons: triggerdown, gripdown;
+          grabEndButtons: triggerup, gripup;"
         snap-turn="target: #rig; turnAngle: 30">
       </a-entity>
     </a-entity>
@@ -117,7 +119,7 @@
       shadow="receive: true">
     </a-plane>
 
-    <!-- Interactive Green Boxes -->
+    <!-- Interactive Green Boxes (Dynamic Physics + Grabbable / Stretchable) -->
     <a-box 
       class="grabbable" 
       grabbable-box
