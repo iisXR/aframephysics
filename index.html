@@ -8,6 +8,9 @@
   <!-- A-Frame Core -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   
+  <!-- A-Frame Extras (Provides movement-controls and snap-turn components) -->
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+  
   <!-- A-Frame Physics System -->
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
   
@@ -49,9 +52,13 @@
     <a-ambient-light color="#bbb"></a-ambient-light>
     <a-directional-light color="#ffffff" intensity="0.8" position="-1 4 2" cast-shadow="true"></a-directional-light>
 
-    <!-- Player Rig / Camera & Super-Hands Controllers -->
-    <a-entity id="rig">
-      <!-- Camera for Desktop/Non-VR Headset Navigation -->
+    <!-- Player Rig with Locomotion (Left Stick) & Snap Turn (Right Stick) -->
+    <a-entity 
+      id="rig" 
+      position="0 0 0" 
+      movement-controls="controls: gamepad, keyboard; speed: 0.15;">
+      
+      <!-- Camera for Head Tracking & Desktop Navigation -->
       <a-camera id="head" position="0 1.6 0" look-controls>
         <!-- Mouse/Touch Super-Hands Cursor for Desktop Testing -->
         <a-entity 
@@ -65,13 +72,12 @@
         </a-entity>
       </a-camera>
 
-      <!-- Left Hand VR Controller -->
-      <!-- Added rotation="-45 0 0" and sphere-collider radius/position tuning to fix controller tilt angle -->
+      <!-- Left Hand VR Controller (Movement & Interaction) -->
       <a-entity 
         id="leftHand"
         hand-controls="hand: left"
         rotation="-45 0 0"
-        sphere-collider="objects: .grabbable; radius: 0.15; radiusOffset: 0"
+        sphere-collider="objects: .grabbable; radius: 0.15"
         super-hands="
           colliderEvent: raycaster-intersection;
           colliderEventProperty: els;
@@ -79,18 +85,24 @@
           colliderEndEventProperty: clearedEls;">
       </a-entity>
 
-      <!-- Right Hand VR Controller -->
-      <!-- Added rotation="-45 0 0" and sphere-collider radius/position tuning to fix controller tilt angle -->
+      <!-- Right Hand VR Controller (Snap Turning 30° & Interaction) -->
       <a-entity 
         id="rightHand"
         hand-controls="hand: right"
         rotation="-45 0 0"
-        sphere-collider="objects: .grabbable; radius: 0.15; radiusOffset: 0"
+        sphere-collider="objects: .grabbable; radius: 0.15"
         super-hands="
           colliderEvent: raycaster-intersection;
           colliderEventProperty: els;
           colliderEndEvent: raycaster-intersection-cleared;
-          colliderEndEventProperty: clearedEls;">
+          colliderEndEventProperty: clearedEls;"
+        magicleap-controls
+        daydream-controls
+        gearvr-controls
+        oculus-touch-controls
+        vive-controls
+        windows-motion-controls
+        snap-turn="target: #rig; turnAngle: 30">
       </a-entity>
     </a-entity>
 
@@ -112,7 +124,7 @@
       position="-0.8 1.2 -2" 
       rotation="0 45 0" 
       width="0.5" height="0.5" depth="0.5" 
-      color="#FA003F" 
+      color="#2E8B57" 
       dynamic-body="shape: box; mass: 2"
       grabbable stretchable hoverable
       shadow="cast: true">
