@@ -8,13 +8,13 @@
   <!-- A-Frame Core -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   
-  <!-- A-Frame Physics System (using aframe-physics-system patched/maintained build for modern A-Frame) -->
+  <!-- A-Frame Physics System -->
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
   
   <!-- Super-Hands Component -->
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-super-hands-component@master/dist/super-hands.min.js"></script>
   
-  <!-- A-Frame Physics Extras (provides physics-body wrappers for super-hands interaction) -->
+  <!-- A-Frame Physics Extras -->
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-extras@master/dist/aframe-physics-extras.min.js"></script>
   
   <!-- Custom Event Listener component for UI / visual feedback -->
@@ -23,7 +23,6 @@
       init: function () {
         var el = this.el;
         
-        // Visual feedback when hovered/grabbed
         el.addEventListener('hover-start', function () {
           el.setAttribute('material', 'wireframe', true);
         });
@@ -67,10 +66,12 @@
       </a-camera>
 
       <!-- Left Hand VR Controller -->
+      <!-- Added rotation="-45 0 0" and sphere-collider radius/position tuning to fix controller tilt angle -->
       <a-entity 
         id="leftHand"
         hand-controls="hand: left"
-        sphere-collider="objects: .grabbable"
+        rotation="-45 0 0"
+        sphere-collider="objects: .grabbable; radius: 0.15; radiusOffset: 0"
         super-hands="
           colliderEvent: raycaster-intersection;
           colliderEventProperty: els;
@@ -79,10 +80,12 @@
       </a-entity>
 
       <!-- Right Hand VR Controller -->
+      <!-- Added rotation="-45 0 0" and sphere-collider radius/position tuning to fix controller tilt angle -->
       <a-entity 
         id="rightHand"
         hand-controls="hand: right"
-        sphere-collider="objects: .grabbable"
+        rotation="-45 0 0"
+        sphere-collider="objects: .grabbable; radius: 0.15; radiusOffset: 0"
         super-hands="
           colliderEvent: raycaster-intersection;
           colliderEventProperty: els;
@@ -102,15 +105,7 @@
       shadow="receive: true">
     </a-plane>
 
-    <!-- Interactive Green Boxes (Dynamic Physics Bodies with Super-Hands support) -->
-    <!-- Attributes breakdown:
-         - dynamic-body: Cannon.js physics enabled (falls, responds to forces/gravity)
-         - grabbable: Super-hands component enabling grab & throw physics
-         - stretchable: Super-hands component enabling scaling/stretching with two hands
-         - hoverable: Enables visual state changes when hands/pointers hover
-         - shadow: Enables shadow rendering
-    -->
-    
+    <!-- Interactive Green Boxes -->
     <a-box 
       class="grabbable" 
       grabbable-box
